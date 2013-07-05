@@ -18,12 +18,15 @@
 #include <cstdlib>
 #include <vector>
 #include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 
 #include "version.h"
+#include "file_exception.h"
 #include "Application.h"
 
 using namespace std;
 namespace po = boost::program_options;
+namespace fs = boost::filesystem;
 
 /// <summary>
 /// Main entry point
@@ -31,6 +34,8 @@ namespace po = boost::program_options;
 /// <returns>int.</returns>
 const int main(const int argc, const char* argv[])
 {
+    fs::path input, output;
+
     try
     {
         po::options_description generic("Generic options");
@@ -71,19 +76,27 @@ const int main(const int argc, const char* argv[])
 
         // continue command line processing, throwing errors on invalid arguments
         po::notify(vm);
-    
-        // check for input file path
-        if (vm.count("input")) {
-            cout << "Input file is: " 
-                 << vm["input"].as<string>() << endl;
+
+        // get input and output file path
+        input = fs::path(vm["input"].as<string>());
+        output = fs::path(vm["output"].as<string>());
+        
+        // check for existence of the input file
+        if (!fs::exists(input)) {
+            throw file_exception("input file does not exist", input);
+        } else if (!fs::is_regular_file(input)) {
+            throw file_exception("input file is not a regular file", input);
         }
 
-        // check for output file path
-        if (vm.count("output")) {
-            cout << "Output file is: " 
-                 << vm["output"].as<string>() << endl;
+        // check for existence of the ouput file
+        if (fs::exists(output)) {
+            throw file_exception("output file already exists", input);
         }
-
+    }
+    catch(file_exception& e)
+    {
+        std::cerr << "Error: " << e.what() << endl;
+        return EXIT_FAILURE;
     }
     catch(std::exception& e)
     {
@@ -96,6 +109,6 @@ const int main(const int argc, const char* argv[])
         return EXIT_FAILURE;
     }
 
-    // unique_ptr<Application> application(new Application());
+    unique_ptr<Application> application(new Application());
     return EXIT_SUCCESS;
 }
