@@ -18,6 +18,8 @@
 #include <cstdlib>
 #include <vector>
 #include <boost/program_options.hpp>
+
+#include "version.h"
 #include "Application.h"
 
 using namespace std;
@@ -63,7 +65,7 @@ const int main(const int argc, const char* argv[])
 
         // print the version string
         if (vm.count("version")) {
-            cout << cmdline_options << endl;
+            cout << VCD2SVG_APPNAME << " " << VCD2SVG_VERSION << endl << VCD2SVG_COPYRIGHT << endl;
             return 1;
         }
 
