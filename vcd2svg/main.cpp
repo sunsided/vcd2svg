@@ -105,10 +105,24 @@ const int main(const int argc, const char* argv[])
     }
     catch(...)
     {
-        std::cerr << "Unknown error!" << endl;
+        std::cerr << "Unknown error while parsing arguments." << endl;
         return EXIT_FAILURE;
     }
 
-    unique_ptr<Application> application(new Application());
-    return EXIT_SUCCESS;
+    // run the application
+    try
+    {
+        unique_ptr<Application> application(new Application(input, output));
+        return application->run() ? EXIT_SUCCESS : EXIT_FAILURE;
+    }
+    catch(std::exception& e)
+    {
+        std::cerr << "Error: " << e.what() << endl;
+        return EXIT_FAILURE;
+    }
+    catch(...)
+    {
+        std::cerr << "Unknown error!" << endl;
+        return EXIT_FAILURE;
+    }
 }

@@ -16,14 +16,42 @@
 #define _APPLICATION_H_
 #pragma once
 
+#include <boost/filesystem.hpp>
+
 /// <summary>
 /// Contains the application logic.
 /// </summary>
 class Application
 {
+private:
+    /// <summary>
+    /// The input file path
+    /// </summary>
+    const boost::filesystem::path _input;
+
+    /// <summary>
+    /// The output file path
+    /// </summary>
+    const boost::filesystem::path _output;
+
 public:
-    Application(void);
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Application"/> class.
+    /// </summary>
+    /// <param name="input">The input.</param>
+    /// <param name="output">The output.</param>
+    Application(const boost::filesystem::path& input, const boost::filesystem::path& output);
+    
+    /// <summary>
+    /// Finalizes an instance of the <see cref="Application" /> class.
+    /// </summary>
     virtual ~Application(void);
+
+    /// <summary>
+    /// Runs this instance.
+    /// </summary>
+    /// <returns>true if successful.</returns>
+    bool run();
 
 private:
     /// <summary>
