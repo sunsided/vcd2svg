@@ -59,7 +59,7 @@ private:
     /// </summary>
     /// <remarks>Forbidden.</remarks>
     /// <param name="">The reference to copy.</param>
-    inline Application(const Application&) {};
+    inline Application(const Application&) {}
     
     /// <summary>
     /// Operator=s the specified .
@@ -67,7 +67,7 @@ private:
     /// <remarks>Forbidden.</remarks>
     /// <param name="">The reference to copy.</param>
     /// <returns>Application &.</returns>
-    inline Application& operator=(const Application&) {}
+    inline Application& operator=(const Application&) { return *this; }
 };
 
 #endif
